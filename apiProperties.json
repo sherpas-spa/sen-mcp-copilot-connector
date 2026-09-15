@@ -1,0 +1,34 @@
+{
+  "properties": {
+    "connectionParameters": {
+      "token": {
+        "type": "oauthSetting",
+        "oAuthSettings": {
+          "identityProvider": "oauth2",
+          "clientId": "SET_IN_PARTNER_CENTER",
+          "scopes": [
+            "openid",
+            "https://www.googleapis.com/auth/userinfo.email"
+          ],
+          "redirectMode": "GlobalPerConnector",
+          "customParameters": {
+            "AuthorizationUrl": {
+              "value": "https://sen-mcp-394946609261.us-central1.run.app/authorize"
+            },
+            "TokenUrl": {
+              "value": "https://sen-mcp-394946609261.us-central1.run.app/token"
+            },
+            "RefreshUrl": {
+              "value": "https://sen-mcp-394946609261.us-central1.run.app/token"
+            }
+          }
+        },
+        "uiDefinition": null
+      }
+    },
+    "iconBrandColor": "#253122",
+    "capabilities": [],
+    "publisher": "Sherpas Group SpA",
+    "stackOwner": "Sherpas Group SpA"
+  }
+}

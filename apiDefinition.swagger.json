@@ -1,0 +1,73 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "SEN Data",
+    "description": "Certified, governed data on Chile's national electricity system (SEN): generation, demand, marginal cost, curtailment, battery storage and commercial settlement, resolved to one canonical identity per plant and company, served as MCP tools. Free alpha; access by individual request.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Sherpas Group SpA",
+      "url": "https://sherpas-sen-mcp.web.app",
+      "email": "jorge@sherpas.net"
+    }
+  },
+  "host": "sen-mcp-394946609261.us-central1.run.app",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/mcp": {
+      "post": {
+        "summary": "SEN Data MCP server",
+        "description": "Streamable HTTP endpoint of the SEN Data MCP server. Tools, resources and prompts are discovered dynamically from the server at connection time; they are not modelled as separate operations here.",
+        "operationId": "InvokeMCP",
+        "x-ms-agentic-protocol": "mcp-streamable-1.0",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "oauth2-auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://sen-mcp-394946609261.us-central1.run.app/authorize",
+      "tokenUrl": "https://sen-mcp-394946609261.us-central1.run.app/token",
+      "scopes": {
+        "openid": "OpenID Connect identity of the signed-in user",
+        "https://www.googleapis.com/auth/userinfo.email": "E-mail address of the signed-in user, checked against the admitted list"
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth2-auth": [
+        "openid",
+        "https://www.googleapis.com/auth/userinfo.email"
+      ]
+    }
+  ],
+  "x-ms-connector-metadata": [
+    {
+      "propertyName": "Website",
+      "propertyValue": "https://sherpas-sen-mcp.web.app"
+    },
+    {
+      "propertyName": "Privacy policy",
+      "propertyValue": "https://sherpas-sen-mcp.web.app/privacy"
+    },
+    {
+      "propertyName": "Categories",
+      "propertyValue": "Data;Business Intelligence"
+    }
+  ]
+}
