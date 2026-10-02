@@ -19,18 +19,46 @@
     "application/json"
   ],
   "produces": [
-    "application/json"
+    "application/json",
+    "text/event-stream"
   ],
   "paths": {
     "/mcp": {
       "post": {
         "summary": "SEN Data MCP server",
-        "description": "Streamable HTTP endpoint of the SEN Data MCP server. Tools, resources and prompts are discovered dynamically from the server at connection time; they are not modelled as separate operations here.",
+        "description": "Streamable HTTP endpoint of the SEN Data MCP server. Tools, resources and prompts are discovered dynamically from the server at connection time; they are not modelled as separate operations here. Microsoft Copilot Studio handles MCP session and protocol negotiation; this operation is not intended to be called directly by makers.",
         "operationId": "InvokeMCP",
         "x-ms-agentic-protocol": "mcp-streamable-1.0",
+        "x-ms-visibility": "advanced",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "default": "application/json, text/event-stream",
+            "description": "Required by the MCP Streamable HTTP transport: the server answers 406 unless the client accepts both application/json and text/event-stream.",
+            "x-ms-visibility": "internal"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "MCP Streamable HTTP response.",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "401": {
+            "description": "Unauthorized. The OAuth token is missing, invalid, or expired."
+          },
+          "406": {
+            "description": "Not acceptable. The Accept header must list both application/json and text/event-stream."
+          },
+          "500": {
+            "description": "Internal server error from the SEN Data MCP server."
           }
         }
       }
@@ -44,7 +72,8 @@
       "tokenUrl": "https://sen-mcp-394946609261.us-central1.run.app/token",
       "scopes": {
         "openid": "OpenID Connect identity of the signed-in user",
-        "https://www.googleapis.com/auth/userinfo.email": "E-mail address of the signed-in user, checked against the admitted list"
+        "https://www.googleapis.com/auth/userinfo.email": "E-mail address of the signed-in user, checked against the admitted list",
+        "offline_access": "Keep the connection signed in by refreshing the access token without asking the user again"
       }
     }
   },
@@ -52,7 +81,8 @@
     {
       "oauth2-auth": [
         "openid",
-        "https://www.googleapis.com/auth/userinfo.email"
+        "https://www.googleapis.com/auth/userinfo.email",
+        "offline_access"
       ]
     }
   ],
@@ -64,6 +94,10 @@
     {
       "propertyName": "Privacy policy",
       "propertyValue": "https://sherpas-sen-mcp.web.app/privacy"
+    },
+    {
+      "propertyName": "API License Agreement",
+      "propertyValue": "https://sherpas-sen-mcp.web.app/terms"
     },
     {
       "propertyName": "Categories",

@@ -23,12 +23,17 @@ Sherpas Group SpA — Santiago, Chile. Support: <jorge@sherpas.net>.
 
 ## How to obtain credentials
 
-No API key is involved. The connector uses **OAuth 2.0 (authorization code
-with PKCE)** against Sherpas' own authorization server; you sign in with the
-Google Workspace account that was admitted to the alpha. The server
-advertises standard discovery documents
-(`/.well-known/oauth-authorization-server`), supports dynamic client
-registration, and refuses any identity that is not on the admitted list.
+No API key and no client secret are involved. The connector uses **OAuth 2.0
+(authorization code with PKCE, `S256`)** against Sherpas' own authorization
+server. When you create the connection, a consent screen of the SEN Data
+authorization server asks you to approve the access, and you then sign in with
+the Google account that was admitted to the alpha. The connector requests the
+`openid` and `userinfo.email` scopes (to identify you and check the admitted
+list) plus `offline_access`, so the connection can refresh its access token
+instead of asking you to sign in again. The server advertises standard
+discovery documents (`/.well-known/oauth-authorization-server`), supports
+dynamic client registration, and refuses any identity that is not on the
+admitted list.
 
 ## Supported operations
 

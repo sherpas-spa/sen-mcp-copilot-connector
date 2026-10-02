@@ -8,8 +8,8 @@ data.
 
 | File | Purpose |
 |---|---|
-| [`apiDefinition.swagger.json`](apiDefinition.swagger.json) | Swagger 2.0 definition: a single `POST /mcp` operation flagged `x-ms-agentic-protocol: mcp-streamable-1.0`. MCP tools are discovered dynamically, so they are not modelled as operations. |
-| [`apiProperties.json`](apiProperties.json) | Connector properties: generic OAuth 2.0 (authorization code + PKCE) against Sherpas' authorization server, brand colour, publisher. The client id is set in Partner Center, never here. |
+| [`apiDefinition.swagger.json`](apiDefinition.swagger.json) | Swagger 2.0 definition: a single `POST /mcp` operation flagged `x-ms-agentic-protocol: mcp-streamable-1.0`, with the internal `Accept: application/json, text/event-stream` header the server requires (it answers 406 without it). MCP tools are discovered dynamically, so they are not modelled as operations. |
+| [`apiProperties.json`](apiProperties.json) | Connector properties: the templated `oauth2generic` identity provider (authorization code + PKCE `S256`, RFC 8707 `resource` indicator, `offline_access`) against Sherpas' authorization server, brand colour, publisher. The client is public (no client secret). `clientId` and `redirectUrl` are placeholders, never guessed: see *Authentication* below. |
 | [`intro.md`](intro.md) | The public documentation Microsoft publishes verbatim once the connector is certified. |
 | [`icon.png`](icon.png) | 230×230 connector icon. |
 
@@ -19,6 +19,28 @@ Not yet submitted. Sherpas' Partner Center account is enrolled in the
 *Microsoft 365 and Copilot* program; certification is filed once the account
 is verified. The server itself is live and already serves Claude and ChatGPT
 clients through the same OAuth surface.
+
+## Authentication
+
+The authorization server requires PKCE (`S256`) from every client. The plain
+`oauth2` identity provider of Power Platform connectors documents no PKCE
+option, so this package uses `oauth2generic` with templates, the pattern of
+the certified Highspot MCP connector: the authorization query carries
+`code_challenge={CodeChallenge}&code_challenge_method=S256` and the token body
+carries `code_verifier={CodeVerifier}`. Both also carry the `resource`
+indicator of the MCP endpoint, and the scopes are `openid`,
+`https://www.googleapis.com/auth/userinfo.email` and `offline_access`.
+
+The client is registered as a public client: no `client_secret` is sent. Two
+values in `apiProperties.json` are placeholders on purpose and are filled when
+the connector is created in the Sherpas tenant, never guessed:
+
+- `clientId` (`SET_IN_PARTNER_CENTER`): the client id the authorization server
+  returns for the connector's callback.
+- `redirectUrl` (`SET_AT_CEA_083_FROM_SECURITY_TAB`): with `GlobalPerConnector`
+  the callback has the shape
+  `https://global.consent.azure-apim.net/redirect/<connector-internal-name>`
+  and exists only once the connector is created (maker portal, *Security* tab).
 
 ## Try it in your own tenant before certification
 

@@ -4,31 +4,55 @@
       "token": {
         "type": "oauthSetting",
         "oAuthSettings": {
-          "identityProvider": "oauth2",
+          "identityProvider": "oauth2generic",
           "clientId": "SET_IN_PARTNER_CENTER",
           "scopes": [
             "openid",
-            "https://www.googleapis.com/auth/userinfo.email"
+            "https://www.googleapis.com/auth/userinfo.email",
+            "offline_access"
           ],
           "redirectMode": "GlobalPerConnector",
+          "redirectUrl": "SET_AT_CEA_083_FROM_SECURITY_TAB",
+          "properties": {
+            "IsFirstParty": "False",
+            "IsOnbehalfofLoginSupported": false
+          },
           "customParameters": {
-            "AuthorizationUrl": {
+            "authorizationUrlTemplate": {
               "value": "https://sen-mcp-394946609261.us-central1.run.app/authorize"
             },
-            "TokenUrl": {
+            "authorizationUrlQueryStringTemplate": {
+              "value": "?resource=https%3A%2F%2Fsen-mcp-394946609261.us-central1.run.app%2Fmcp&client_id={ClientId}&response_type=code&redirect_uri={RedirectUrl}&scope={Scopes}&state={State}&code_challenge={CodeChallenge}&code_challenge_method=S256"
+            },
+            "tokenUrlTemplate": {
               "value": "https://sen-mcp-394946609261.us-central1.run.app/token"
             },
-            "RefreshUrl": {
+            "tokenBodyTemplate": {
+              "value": "resource=https%3A%2F%2Fsen-mcp-394946609261.us-central1.run.app%2Fmcp&client_id={ClientId}&grant_type=authorization_code&code={Code}&redirect_uri={RedirectUrl}&code_verifier={CodeVerifier}"
+            },
+            "refreshUrlTemplate": {
               "value": "https://sen-mcp-394946609261.us-central1.run.app/token"
+            },
+            "refreshBodyTemplate": {
+              "value": "resource=https%3A%2F%2Fsen-mcp-394946609261.us-central1.run.app%2Fmcp&client_id={ClientId}&grant_type=refresh_token&refresh_token={RefreshToken}"
             }
           }
         },
-        "uiDefinition": null
+        "uiDefinition": {
+          "displayName": "SEN Data OAuth Connection",
+          "description": "Sign in with the Google account that was admitted to the SEN Data alpha.",
+          "tooltip": "Sign in with the Google account admitted to the SEN Data alpha. Access is granted by individual request.",
+          "constraints": {
+            "required": "true",
+            "hidden": "false"
+          }
+        }
       }
     },
     "iconBrandColor": "#253122",
     "capabilities": [],
     "publisher": "Sherpas Group SpA",
-    "stackOwner": "Sherpas Group SpA"
+    "stackOwner": "Sherpas Group SpA",
+    "policyTemplateInstances": []
   }
 }
